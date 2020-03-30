@@ -25,19 +25,25 @@ interface IProps {
   getPageNumber?: any;
   pageScroll?:number;
   width?: number;
+  connected?: boolean;
+  premium?: boolean;
 }
 interface IStates {
   pdf: any;
   page: number;
   style: object;
   totalPage: number;
+  premium: boolean;
+  connected: boolean;
 }
 export class PDFReader extends React.Component<IProps, IStates> {
     state: IStates = {
       pdf: null,
       style: null,
       page: 1,
-      totalPage: 0
+      totalPage: 0,
+      premium: false,
+      connected: false,
     };
     canvas: any;
     public constructor(props: IProps) {
@@ -179,14 +185,22 @@ export class PDFReader extends React.Component<IProps, IStates> {
     }
     private renderAllPage() {
         var self=this;
-       const { pdf, totalPage } = this.state;
+       const { pdf, totalPage, premium, connected } = this.state;
        const { width, scale,onDocumentComplete } = this.props;
        if (totalPage > 0) {
            let proArr=[]
-         for (let i = 1; i <= totalPage; i++) {
-           const dom = this["canvas" + i];
-             proArr.push( this.renderPage(dom, i))
-         }
+           if(premium && connected){
+            for (let i = 1; i <= totalPage; i++) {
+              const dom = this["canvas" + i];
+                proArr.push( this.renderPage(dom, i))
+            }
+           } else {
+             var pagesToShow = totalPage/20;
+            for (let i = 1; i <= pagesToShow; i++) {
+              const dom = this["canvas" + i];
+                proArr.push( this.renderPage(dom, i))
+            }
+           }        
            Promise.all(proArr).then(function(values) {
                if (onDocumentComplete) {
                    self.props.onDocumentComplete(pdf.numPages);
