@@ -28,7 +28,8 @@ var React = require("react");
 var styles = require("./index.less");
 var pdfjsLib = require("pdfjs-dist");
 // The workerSrc property shall be specified.
-pdfjsLib.GlobalWorkerOptions.workerSrc = "https://cdnjs.cloudflare.com/ajax/libs/pdf.js/2.0.550/pdf.worker.js";
+pdfjsLib.GlobalWorkerOptions.workerSrc =
+    "https://cdnjs.cloudflare.com/ajax/libs/pdf.js/2.0.550/pdf.worker.js";
 // the default params
 var DEFAULT_DESIRE_WIDTH = 980;
 var DEFAULT_SCALE = 1;
@@ -42,7 +43,7 @@ var PDFReader = /** @class */ (function (_super) {
             page: 1,
             totalPage: 0,
             premium: false,
-            connected: false,
+            connected: false
         };
         _this.canvas = React.createRef();
         return _this;
@@ -104,7 +105,10 @@ var PDFReader = /** @class */ (function (_super) {
     PDFReader.getDerivedStateFromProps = function (props, state) {
         var pageScroll = props.pageScroll, pdfDiv = props.pdfDiv;
         if (pdfDiv && (pageScroll || pageScroll === 0)) {
-            var elmnt = document.querySelector("#" + pdfDiv).querySelector("#my-pdf").querySelector('#div-pdf-' + pageScroll);
+            var elmnt = document
+                .querySelector("#" + pdfDiv)
+                .querySelector("#my-pdf")
+                .querySelector("#div-pdf-" + pageScroll);
             if (elmnt) {
                 elmnt.scrollIntoView();
             }
@@ -164,7 +168,7 @@ var PDFReader = /** @class */ (function (_super) {
                 if (showAllPage) {
                     self.setState({
                         style: {
-                            height: 'auto',
+                            height: "auto",
                             width: canvas.width
                         }
                     });
@@ -222,7 +226,7 @@ var PDFReader = /** @class */ (function (_super) {
     PDFReader.prototype.getPageScroll = function (page) {
         var pageScroll = this.props.pageScroll;
         if (pageScroll) {
-            var elmnt = document.getElementById('div-pdf-' + page);
+            var elmnt = document.getElementById("div-pdf-" + page);
             elmnt.scrollIntoView();
         }
     };
@@ -232,13 +236,13 @@ var PDFReader = /** @class */ (function (_super) {
         var showAllPage = this.props.showAllPage;
         var tempArr = new Array(totalPage);
         tempArr.fill(0);
-        return (React.createElement("div", { id: "my-pdf", style: style, className: styles["pdf__container"] }, showAllPage ? React.createElement(React.Fragment, null, tempArr.map(function (item, i) {
+        return (React.createElement("div", { id: 'my-pdf', style: style, className: styles["pdf__container"] }, showAllPage ? (React.createElement(React.Fragment, null, tempArr.map(function (item, i) {
             var index = i + 1;
-            return (React.createElement("div", { className: "react-pdf__Page", "data-page-number": index + "", id: "div-pdf-" + index, key: "div-" + index, onClick: _this.getCurrentPageNumber.bind(_this, index) },
-                React.createElement("canvas", { ref: function (canvas) { _this["canvas" + index] = canvas; }, key: index + "", id: "canvas-pdf-" + index, "data-page": index + "", className: "canvaspdf" })));
-        }))
-            :
-                React.createElement("canvas", { ref: this.canvas })));
+            return (React.createElement("div", { className: 'react-pdf__Page', "data-page-number": index + "", id: "div-pdf-" + index, key: "div-" + index, onClick: _this.getCurrentPageNumber.bind(_this, index) },
+                React.createElement("canvas", { ref: function (canvas) {
+                        _this["canvas" + index] = canvas;
+                    }, key: index + "", id: "canvas-pdf-" + index, "data-page": index + "", className: "canvaspdf" })));
+        }))) : (React.createElement("canvas", { ref: this.canvas }))));
     };
     return PDFReader;
 }(React.Component));
